@@ -20,11 +20,11 @@ export default function ConversationCard({
 
   useEffect(() => {
     const fetchMessage = async () => {
-      if (!room.lastestMessageId) return;
-      else setLastestMessage(await getMessageById(room.lastestMessageId));
+      if (!room.latestMessageId) return;
+      else setLastestMessage(await getMessageById(room.latestMessageId));
     };
     fetchMessage();
-  }, [room.lastestMessageId]);
+  }, [room.latestMessageId]);
 
   return (
     <Link
