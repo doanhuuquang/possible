@@ -10,6 +10,7 @@ import {
   addDoc,
   serverTimestamp,
   orderBy,
+  limit,
 } from "firebase/firestore";
 import firestore from "@/lib/firebase/firebase-firestore-database";
 
@@ -46,6 +47,44 @@ const listenToMessagesInRoom = (
   });
 };
 
+export const listenToLatestMessageInRoom = (
+  roomId: string,
+  callback: (message: Message | null) => void
+) => {
+  const messagesRef = collection(firestore, "messages");
+  const q = query(
+    messagesRef,
+    where("roomId", "==", roomId),
+    orderBy("createdAt", "desc"),
+    limit(1)
+  );
+
+  return onSnapshot(q, (snapshot) => {
+    if (snapshot.empty) {
+      callback(null);
+      return;
+    }
+
+    const docSnap = snapshot.docs[0];
+    const childData = docSnap.data();
+
+    const message = new Message({
+      id: docSnap.id,
+      senderId: childData.senderId,
+      roomId: childData.roomId,
+      messageType: childData.messageType,
+      content: childData.content,
+      status: childData.status,
+      createdAt:
+        typeof childData.createdAt?.toDate === "function"
+          ? childData.createdAt.toDate()
+          : new Date(childData.createdAt),
+    });
+
+    callback(message);
+  });
+};
+
 const getMessageById = async (messageId: string): Promise<Message | null> => {
   const messageRef = collection(firestore, "messages");
   const docSnap = await getDoc(doc(messageRef, messageId));
@@ -78,10 +117,10 @@ const sentMessage = async ({
   roomId: string;
   messageType: "text" | "image";
   content: string;
-}) => {
+}): Promise<string> => {
   try {
     const messageRef = collection(firestore, "messages");
-    await addDoc(messageRef, {
+    const docRef = await addDoc(messageRef, {
       senderId,
       roomId,
       messageType,
@@ -89,8 +128,10 @@ const sentMessage = async ({
       status: "sent",
       createdAt: serverTimestamp(),
     });
+
+    return docRef.id;
   } catch (error) {
-    return error;
+    return "";
   }
 };
 

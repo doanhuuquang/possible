@@ -7,6 +7,7 @@ import {
   where,
   getDoc,
   doc,
+  updateDoc,
 } from "firebase/firestore";
 import firestore from "@/lib/firebase/firebase-firestore-database";
 import { Room } from "@/lib/models/room";
@@ -77,4 +78,11 @@ const getRoomById = async (roomId: string): Promise<Room | null> => {
   });
 };
 
-export { createRoom, listenToRooms, getRoomById };
+const updateLatestMessageInRoom = async (messageId: string, roomId: string) => {
+  const roomsRef = doc(firestore, "rooms", roomId);
+  await updateDoc(roomsRef, {
+    latestMessageId: messageId,
+  });
+};
+
+export { createRoom, listenToRooms, getRoomById, updateLatestMessageInRoom };

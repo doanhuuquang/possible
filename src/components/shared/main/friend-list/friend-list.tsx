@@ -7,18 +7,17 @@ import { listenToFriends } from "@/lib/services/friend-ship-service";
 import { useEffect, useState } from "react";
 import AppContainer from "@/components/shared/main/app-container";
 import UserCard from "@/components/shared/main/user-card/user-card";
-import { FriendShip } from "@/lib/models/friend-ship";
 
 export default function FriendList() {
   const [friends, setFriends] = useState<User[]>([]);
-  const userIdContext = useUser().user?.id || "";
+  const contextUserId = useUser().user?.id || "";
 
   useEffect(() => {
-    if (!userIdContext) return;
+    if (contextUserId === "") return;
 
-    const unsubscribe = listenToFriends(userIdContext, async (friendships) => {
+    const unsubscribe = listenToFriends(contextUserId, async (friendships) => {
       const friendIds = friendships.map((f) =>
-        f.requesterId === userIdContext ? f.receiverId : f.requesterId
+        f.requesterId === contextUserId ? f.receiverId : f.requesterId
       );
 
       const fetchedUsers = await Promise.all(
@@ -29,16 +28,10 @@ export default function FriendList() {
     });
 
     return () => unsubscribe();
-  }, [userIdContext]);
+  }, [contextUserId]);
 
   return (
     <AppContainer className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-4">
-      {friends.map((user) => (
-        <UserCard key={user.id} user={user} />
-      ))}
-      {friends.map((user) => (
-        <UserCard key={user.id} user={user} />
-      ))}
       {friends.map((user) => (
         <UserCard key={user.id} user={user} />
       ))}

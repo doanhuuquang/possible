@@ -4,7 +4,7 @@ export class Room {
   createdAt: Date;
   createdBy: string;
   updatedAt: Date;
-  updatedBy: Date;
+  updatedBy: string;
   roomName: string;
   roomAvatar: string;
   roomType: "private" | "group";
@@ -16,7 +16,7 @@ export class Room {
     createdAt: Date;
     createdBy: string;
     updatedAt: Date;
-    updatedBy: Date;
+    updatedBy: string;
     roomName: string;
     roomAvatar: string;
     roomType: "private" | "group";
