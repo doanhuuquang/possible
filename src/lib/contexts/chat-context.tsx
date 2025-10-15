@@ -8,6 +8,7 @@ import { listenToMessagesInRoom } from "@/lib/services/message-service";
 import { listenToRooms } from "@/lib/services/room-service";
 import { getUserById } from "@/lib/services/user-service";
 import { useContext, createContext, useEffect, useCallback } from "react";
+import { useState } from "react";
 
 type ChatContextType = {
   rooms: Room[];
@@ -30,8 +31,6 @@ const ChatContext = createContext<ChatContextType>({
   roomsLoading: true,
   usersInActiveRoomLoading: true,
 });
-
-import { useState } from "react";
 
 export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
   const contextUserId = useUser().user?.id;

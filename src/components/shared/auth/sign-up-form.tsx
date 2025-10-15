@@ -97,7 +97,6 @@ export default function SignupForm() {
       form.reset();
 
       toast("Thành công", {
-        position: "top-center",
         description: "Đăng ký tài khoản thành công.",
         action: {
           label: "Ok",
@@ -111,7 +110,6 @@ export default function SignupForm() {
         error.code === "auth/email-already-in-use"
       ) {
         toast("Thất bại", {
-          position: "top-center",
           description: "Email đã được sử dụng. Vui lòng thử email khác.",
           action: {
             label: "Ok",
@@ -120,7 +118,6 @@ export default function SignupForm() {
         });
       } else {
         toast("Thất bại", {
-          position: "top-center",
           description: "Đăng ký tài khoản thất bại. Vui lòng thử lại sau.",
           action: {
             label: "Ok",

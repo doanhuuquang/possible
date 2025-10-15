@@ -14,7 +14,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { LoaderCircle, MessageSquareWarning } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 import React from "react";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
@@ -63,7 +63,6 @@ export default function LoginForm() {
       form.reset();
 
       toast("Thành công", {
-        position: "top-center",
         description: "Đăng nhập thành công. Chào mừng bạn trở lại!",
         action: {
           label: "Ok",
@@ -76,7 +75,6 @@ export default function LoginForm() {
         error.code === "auth/invalid-credential"
       ) {
         toast("Thất bại", {
-          position: "top-center",
           description: "Thông tin đăng nhập không đúng. Vui lòng kiểm tra lại.",
           action: {
             label: "Ok",
@@ -85,7 +83,6 @@ export default function LoginForm() {
         });
       } else {
         toast("Thất bại", {
-          position: "top-center",
           description: "Đăng nhập thất bại. Vui lòng thử lại sau.",
           action: {
             label: "Ok",

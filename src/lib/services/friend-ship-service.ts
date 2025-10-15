@@ -18,7 +18,6 @@ const sendFriendRequest = async (requesterId: string, receiverId: string) => {
   const friendshipRef = collection(firestore, "friendships");
 
   await addDoc(friendshipRef, {
-    id: `${requesterId}_${receiverId}`,
     requesterId,
     receiverId,
     participants: [requesterId, receiverId],
@@ -39,14 +38,13 @@ const updateFriendRequest = async (
   });
 };
 
-const listenToFriends = (
+const listenToFriendShips = (
   userId: string,
-  callback: (friends: FriendShip[]) => void
+  callback: (friendShips: FriendShip[]) => void
 ) => {
   const friendshipsRef = collection(firestore, "friendships");
   const q = query(
     friendshipsRef,
-    where("status", "==", "accepted"),
     where("participants", "array-contains", userId)
   );
 
@@ -54,6 +52,7 @@ const listenToFriends = (
     const data = snapshot.docs.map(
       (docSnap) =>
         ({
+          id: docSnap.id,
           ...docSnap.data(),
         } as FriendShip)
     );
@@ -61,4 +60,4 @@ const listenToFriends = (
   });
 };
 
-export { sendFriendRequest, updateFriendRequest, listenToFriends };
+export { sendFriendRequest, updateFriendRequest, listenToFriendShips };
